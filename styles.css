@@ -6,35 +6,48 @@ body {
     color: #fff;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center; /* Center elements vertically */
     align-items: center;
     height: 100vh;
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header {
     background-color: #0f0f0f;
     color: #fff;
     text-align: center;
-    padding: 40px 20px 0; /* Decrease the top padding to bring elements closer */
-}
-
-header h1 {
-    margin: 10px 0; /* Adjust the margin to move the h1 element closer to the image */
+    padding: 20px; /* Adjust padding as needed */
+    margin-bottom: 10px; /* Add margin-bottom to separate the header from nav */
 }
 
 header img {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    margin-top: 0; /* Remove the top margin to align the image closer to the h1 element */
+    margin-top: 5px; /* Adjust the top margin to bring the profile picture closer */
     background-color: #0f0f0f;
+}
+
+header h1 {
+    margin: 5px 0;
+}
+
+.bio {
+    font-size: 18px;
+    margin: 5px 0;
+    text-transform: lowercase;
 }
 
 nav {
     background-color: #0f0f0f;
     text-align: center;
-    padding: 0 10px;
-    margin-top: 10px; /* Add margin-top to separate the nav element from the header */
+    padding: 0;
+    margin-top: -10px; /* Adjust the negative margin to bring nav closer to the header */
 }
 
 nav ul {
@@ -42,12 +55,10 @@ nav ul {
     padding: 0;
     background-color: #0f0f0f;
     display: flex;
-    justify-content: center;
 }
 
 nav ul li {
-    flex: 1;
-    margin: 0 10px;
+    margin: 0 3px; /* Adjust the margin to bring the social links closer */
 }
 
 nav ul li a {
@@ -57,7 +68,6 @@ nav ul li a {
 
 .social-icon {
     font-size: 24px;
-    margin-right: 10px;
     color: white;
 }
 
@@ -77,10 +87,5 @@ footer {
     color: #fff;
     text-align: center;
     padding: 20px;
-}
-
-.bio {
-    font-size: 18px;
-    margin: 10px 0;
-    text-transform: lowercase;
+    margin-top: 30px; /* Adjust the margin-top to move the footer down */
 }
