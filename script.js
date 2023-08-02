@@ -6,90 +6,78 @@ document.getElementById("continuebutton").addEventListener("click", function() {
     audioplayer.loop = true;
 });
 
-let canvas = document.getElementById("canvas");
-let context = canvas.getContext("2d");
-let width = window.innerWidth;
-let height = window.innerHeight;
-let nearParticles = [],
-  middleParticles = [],
-  farParticles = [];
-let particleSettings = {
-  count: 250,
-};
+var amountOfSnowflakes = 505,
+	snowFlake = ["#DDD", "#EEE"],
+	snowSpeed = 0.75,
+	snowMinSize = 8,
+	snowMaxSize = 24,
+	snowFlakes = [],
+	pos = [],
+	coords = [],
+	lefr = [],
+	marginBottom,
+	marginRight;
 
-window.requestAnimationFrame =
-  window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.oRequestAnimationFrame ||
-  window.msRequestAnimationFrame ||
-  function (callback) {
-    window.setTimeout(callback, 1000 / 60);
-  };
+RandomWithRanges = (range) => Math.floor(range * Math.random());
 
-function randomNumberGenerator(min, max) {
-  return Math.random() * (max - min) + min;
+initSnow = () => {
+	var snowSize = snowMaxSize - snowMinSize;
+	marginBottom = document.body.scrollHeight - 5;
+	marginRight = document.body.clientWidth - 15;
+	for (let i = 0; i <= amountOfSnowflakes; i++) {
+		coords[i] = 0;
+		lefr[i] = Math.random() * 15;
+		pos[i] = 0.03 + Math.random() / 10;
+		snowFlakes[i] = document.getElementById("flake" + i);
+		snowFlakes[i].style.fontFamily = "inherit";
+		snowFlakes[i].size = RandomWithRanges(snowSize) + snowMinSize;
+		snowFlakes[i].style.fontSize = snowFlakes[i].size + "px";
+		snowFlakes[i].style.color = snowFlake[RandomWithRanges(snowFlake.length)];
+		snowFlakes[i].style.zIndex = 1000;
+		snowFlakes[i].sink = snowSpeed * snowFlakes[i].size / 5;
+		snowFlakes[i].posX = RandomWithRanges(marginRight - snowFlakes[i].size);
+		snowFlakes[i].posY = RandomWithRanges(2 * marginBottom - marginBottom - 2 * snowFlakes[i].size);
+		snowFlakes[i].style.left = snowFlakes[i].posX + "px";
+		snowFlakes[i].style.top = snowFlakes[i].posY + "px";
+	}
+
+	moveSnow();
 }
 
-function createsnowfall(particles, flag) {
-  while (particles.length < particleSettings.count) {
-    let particle;
-    if (flag == "near") {
-      particle = new Particle(4, 0.9, 0.3);
-    } else if (flag == "middle") {
-      particle = new Particle(3, 0.5, 0.2);
-    } else {
-      particle = new Particle(2, 0.3, 0.1);
-    }
-    particle.color = `rgb(255,255,255)`;
-    particles.push(particle);
-  }
+
+moveSnow = () => {
+	for (let i = 0; i <= amountOfSnowflakes; i++) {
+		coords[i] += pos[i];
+		snowFlakes[i].posY += snowFlakes[i].sink;
+		snowFlakes[i].style.left = snowFlakes[i].posX + lefr[i] * Math.sin(coords[i]) + "px";
+		snowFlakes[i].style.top = snowFlakes[i].posY + "px";
+
+		if (snowFlakes[i].posY >= marginBottom - 2 * snowFlakes[i].size || parseInt(snowFlakes[i].style.left) > (marginRight - 3 * lefr[i])) {
+			snowFlakes[i].posX = RandomWithRanges(marginRight - snowFlakes[i].size);
+			snowFlakes[i].posY = 0;
+		}
+	}
+	var snowRefresh = 50;
+	setTimeout("moveSnow()", snowRefresh);
 }
 
-function startSnowFall() {
-  context.fillStyle = "rgba(0,0,0,1)";
-  context.fillRect(0, 0, width, height);
-  createsnowfall(nearParticles, "near");
-  createsnowfall(farParticles, "far");
-  createsnowfall(middleParticles, "middle");
-  particles = [...nearParticles, ...middleParticles, ...farParticles];
-  particles = particles.sort(() => 0.5 - Math.random());
-  for (let i in particles) {
-    particles[i].draw();
-    if (particles[i].y > height) {
-      particles[i].y = Math.random() * height - height;
-    }
-  }
-  window.requestAnimationFrame(startSnowFall);
+var snowStyles = `cursor: default; 
+-webkit-user-select: none; 
+-moz-user-select: none; 
+-ms-user-select: none; 
+-o-user-select: none; 
+user-select: none; 
+position:absolute; 
+top:-${snowMaxSize};
+`;
+
+for (let i = 0; i <= amountOfSnowflakes; i++) {
+	document.write(`<span id='flake${i}' style="${snowStyles}">&#x2022;</span>`);
 }
 
-function Particle(areaValue, alphaValue, vyValue) {
-  this.area = areaValue;
-  this.x = Math.random() * width;
-  this.y = Math.random() * height - height;
-  this.alpha = alphaValue;
-  this.vy = vyValue * 10;
+resize = () => {
+	marginBottom = document.body.scrollHeight - 5;
+	marginRight = document.body.clientWidth - 15;
 }
-
-Particle.prototype = {
-  draw: function () {
-    this.y += (Math.cos(this.area) + this.vy) * 0.3;
-    context.save();
-    context.beginPath();
-    context.arc(this.x, this.y, this.area, 0, Math.PI * 2);
-    context.fillStyle = this.color;
-    context.globalAlpha = this.alpha;
-    context.closePath();
-    context.fill();
-    context.restore();
-  },
-};
-
-window.onload = () => {
-  canvas.width = width;
-  canvas.height = height;
-  nearParticles = [];
-  middleParticles = [];
-  farParticles = [];
-  window.requestAnimationFrame(startSnowFall);
-};
+window.addEventListener('resize', resize);
+window.addEventListener('load', initSnow);
