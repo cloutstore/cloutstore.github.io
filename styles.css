@@ -135,12 +135,20 @@ footer {
     }
 }
 
-.snow {
+#snowflakeContainer {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: none;
+}
+
+.snowflake {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
+    background-color: #FFFFFF;
+    user-select: none;
     z-index: 1000;
+    pointer-events: none;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
 }
