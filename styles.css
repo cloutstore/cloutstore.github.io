@@ -1,3 +1,5 @@
+$b:100;
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -135,20 +137,31 @@ footer {
     }
 }
 
-#snowflakeContainer {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    display: none;
+.b{
+  border-radius:50%;
+  float: left;
+  margin-top: -50px;
+  position: absolute;
+  @for $i from 0 to $b {
+    $rw:random(10)+1;
+   
+    $ra:random(20)+10;
+    $rd:random(10)+1;
+    
+    $rc:random(10)+90;
+    
+                    
+    &:nth-child(#{$i + 1}){
+      margin-left: (percentage(1)/$b)*$i;
+      width: $rw+px;
+      height: $rw+px;
+      background:hsla(0,0%,$rc,.8);
+      box-shadow: 0 0 15px 10px hsla(0,0%,$rc,.5);
+      animation: fall $ra+s $rd+s  infinite;
+    }    
+  }
 }
 
-.snowflake {
-    position: fixed;
-    background-color: #FFFFFF;
-    user-select: none;
-    z-index: 1000;
-    pointer-events: none;
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-}
+@keyframes fall { 0% { transform: scale(0) }
+                  2% { transform: scale(1); top: -50px; } 
+                100% { transform: scale(0); top: 100%; } }
